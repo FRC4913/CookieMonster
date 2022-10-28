@@ -87,10 +87,14 @@ public class HuskyTeleOpMode extends LinearOpMode {
 //            rx += 0.3 * (gamepad2.right_stick_x);
 //            rx = Range.clip(rx, -1, 1);
 
-            double frontLeftVelocity = (y + x + rx);
-            double rearLeftVelocity = (y - x + rx);
-            double frontRightVelocity = (y - x - rx);
-            double rearRightVelocity = (y + x - rx);
+            // uses the left trigger to switch between different drive speeds.
+            float driveVelocity = gamepad1.left_trigger;
+
+            // calculate motor velocities.
+            double frontLeftVelocity = (y + x + rx) * driveVelocity;
+            double rearLeftVelocity = (y - x + rx) * driveVelocity;
+            double frontRightVelocity = (y - x - rx) * driveVelocity;
+            double rearRightVelocity = (y + x - rx) * driveVelocity;
 
             // apply the calculated values to the motors.
             huskyBot.frontLeftDrive.setVelocity(frontLeftVelocity);
