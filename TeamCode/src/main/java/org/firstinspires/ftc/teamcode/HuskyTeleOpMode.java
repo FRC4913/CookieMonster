@@ -31,9 +31,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+// import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
+// import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -48,6 +49,26 @@ public class HuskyTeleOpMode extends LinearOpMode {
     final double FINAL_TIME = 110.0;    // last 10 seconds
     boolean endGameRumbled = false;
     boolean finalRumbled = false;
+
+
+    // method to smoothly accelerate a motor given a target speed. may reduce jerk (NEEDS TESTING)
+    void smoothAcceleration(DcMotorEx motor, double targetVel, double accelRate) {
+        double currentVel = motor.getVelocity();
+        double changeVel;
+
+        // check if currentVel is close to targetVel. if it is, don't change the velocity.
+        if (Math.abs(currentVel - targetVel) < accelRate) {
+            changeVel = 0;
+        }
+        // set change in velocity based on if currentVel is higher or lower than targetVel.
+        else {
+            changeVel = (currentVel < targetVel) ? accelRate : -accelRate;
+        }
+
+        // change the velocity of the motor (accelerate) based on changeVel.
+        motor.setVelocity(currentVel + changeVel);
+    }
+
 
     @Override
     public void runOpMode() {
@@ -88,7 +109,8 @@ public class HuskyTeleOpMode extends LinearOpMode {
 //            rx = Range.clip(rx, -1, 1);
 
             // uses the left trigger to switch between different drive speeds.
-            // the left trigger returns a float value from 0.0 to 1.0, based on
+            // when the trigger is fully released, driveVelocity = 1.
+            // when the trigger is fully pressed, driveVelocity = 0.2.
             float driveVelocity = (float) (1 - 0.8*gamepad1.left_trigger);
 
             // calculate motor velocities.
@@ -97,11 +119,17 @@ public class HuskyTeleOpMode extends LinearOpMode {
             double frontRightVelocity = (y - x - rx) * driveVelocity;
             double rearRightVelocity = (y + x - rx) * driveVelocity;
 
-            // apply the calculated values to the motors.
-            huskyBot.frontLeftDrive.setVelocity(frontLeftVelocity);
-            huskyBot.rearLeftDrive.setVelocity(rearLeftVelocity);
-            huskyBot.frontRightDrive.setVelocity(frontRightVelocity);
-            huskyBot.rearRightDrive.setVelocity(rearRightVelocity);
+            // apply the calculated values to the motors using smooth acceleration.
+            smoothAcceleration(huskyBot.frontLeftDrive, frontLeftVelocity, 0.5);
+            smoothAcceleration(huskyBot.rearLeftDrive, rearLeftVelocity, 0.5);
+            smoothAcceleration(huskyBot.frontRightDrive, frontRightVelocity, 0.5);
+            smoothAcceleration(huskyBot.rearRightDrive, rearRightVelocity, 0.5);
+
+            //standard method of setting velocity
+//            huskyBot.frontLeftDrive.setVelocity(frontLeftVelocity);
+//            huskyBot.rearLeftDrive.setVelocity(rearLeftVelocity);
+//            huskyBot.frontRightDrive.setVelocity(frontRightVelocity);
+//            huskyBot.rearRightDrive.setVelocity(rearRightVelocity);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
