@@ -35,8 +35,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 // import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+// import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import java.lang.Math;
 
 @TeleOp(name = "Husky TeleOpMode", group = "TeleOp")
 public class HuskyTeleOpMode extends LinearOpMode {
@@ -120,10 +120,10 @@ public class HuskyTeleOpMode extends LinearOpMode {
             double rearRightVelocity = (y + x - rx) * driveVelocity;
 
             // apply the calculated values to the motors using smooth acceleration.
-            smoothAcceleration(huskyBot.frontLeftDrive, frontLeftVelocity, 0.5);
-            smoothAcceleration(huskyBot.rearLeftDrive, rearLeftVelocity, 0.5);
-            smoothAcceleration(huskyBot.frontRightDrive, frontRightVelocity, 0.5);
-            smoothAcceleration(huskyBot.rearRightDrive, rearRightVelocity, 0.5);
+            smoothAcceleration(huskyBot.frontLeftDrive, frontLeftVelocity, 2);
+            smoothAcceleration(huskyBot.rearLeftDrive, rearLeftVelocity, 2);
+            smoothAcceleration(huskyBot.frontRightDrive, frontRightVelocity, 2);
+            smoothAcceleration(huskyBot.rearRightDrive, rearRightVelocity, 2);
 
             //standard method of setting velocity
 //            huskyBot.frontLeftDrive.setVelocity(frontLeftVelocity);
