@@ -88,7 +88,8 @@ public class HuskyTeleOpMode extends LinearOpMode {
 //            rx = Range.clip(rx, -1, 1);
 
             // uses the left trigger to switch between different drive speeds.
-            // the left trigger returns a float value from 0.0 to 1.0, based on
+            // when the trigger is fully released, driveVelocity = 1.
+            // when the trigger is fully pressed, driveVelocity = 0.2.
             float driveVelocity = (float) (1 - 0.8*gamepad1.left_trigger);
 
             // calculate motor velocities.
