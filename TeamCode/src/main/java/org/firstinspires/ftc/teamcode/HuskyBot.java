@@ -51,6 +51,9 @@ public class HuskyBot {
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
+    // add velocity constant: NEEDS TO BE UPDATED!
+    public static final double VELOCITY_CONSTANT = 537.7 * 312/60;
+
     public HuskyBot() {
 
     }

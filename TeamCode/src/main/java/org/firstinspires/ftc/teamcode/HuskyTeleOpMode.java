@@ -114,10 +114,10 @@ public class HuskyTeleOpMode extends LinearOpMode {
             float driveVelocity = (float) (1 - 0.8*gamepad1.left_trigger);
 
             // calculate motor velocities.
-            double frontLeftVelocity = (y + x + rx) * driveVelocity;
-            double rearLeftVelocity = (y - x + rx) * driveVelocity;
-            double frontRightVelocity = (y - x - rx) * driveVelocity;
-            double rearRightVelocity = (y + x - rx) * driveVelocity;
+            double frontLeftVelocity = (y + x + rx) * driveVelocity * HuskyBot.VELOCITY_CONSTANT;
+            double rearLeftVelocity = (y - x + rx) * driveVelocity * HuskyBot.VELOCITY_CONSTANT;
+            double frontRightVelocity = (y - x - rx) * driveVelocity * HuskyBot.VELOCITY_CONSTANT;
+            double rearRightVelocity = (y + x - rx) * driveVelocity * HuskyBot.VELOCITY_CONSTANT;
 
             // apply the calculated values to the motors using smooth acceleration.
             smoothAcceleration(huskyBot.frontLeftDrive, frontLeftVelocity, 2);
