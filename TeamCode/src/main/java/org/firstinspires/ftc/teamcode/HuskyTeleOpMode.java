@@ -54,11 +54,11 @@ public class HuskyTeleOpMode extends LinearOpMode {
     // method to smoothly accelerate a motor given a target speed. may reduce jerk (NEEDS TESTING)
     void smoothAcceleration(DcMotorEx motor, double targetVel, double accelRate) {
         double currentVel = motor.getVelocity();
-        double changeVel;
+        double changeVel = 0;
 
         // check if currentVel is close to targetVel. if it is, don't change the velocity.
         if (Math.abs(currentVel - targetVel) < accelRate) {
-            changeVel = 0;
+            currentVel = targetVel;
         }
         // set change in velocity based on if currentVel is higher or lower than targetVel.
         else {
@@ -111,7 +111,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
             // uses the left trigger to dynamically shift between different drive speeds.
             // when the trigger is fully released, driveVelocity = 1.
             // when the trigger is fully pressed, driveVelocity = 0.2.
-            float driveVelocity = (float) (1 - 0.8*gamepad1.left_trigger);
+            float driveVelocity = (float) (1 - 0.8 * gamepad1.left_trigger);
 
             // calculate motor velocities.
             double frontLeftVelocity = (y + x + rx) * driveVelocity * HuskyBot.VELOCITY_CONSTANT;
@@ -120,10 +120,10 @@ public class HuskyTeleOpMode extends LinearOpMode {
             double rearRightVelocity = (y + x - rx) * driveVelocity * HuskyBot.VELOCITY_CONSTANT;
 
             // apply the calculated values to the motors using smooth acceleration.
-            smoothAcceleration(huskyBot.frontLeftDrive, frontLeftVelocity, 2);
-            smoothAcceleration(huskyBot.rearLeftDrive, rearLeftVelocity, 2);
-            smoothAcceleration(huskyBot.frontRightDrive, frontRightVelocity, 2);
-            smoothAcceleration(huskyBot.rearRightDrive, rearRightVelocity, 2);
+            smoothAcceleration(huskyBot.frontLeftDrive, frontLeftVelocity, HuskyBot.VELOCITY_CONSTANT/5);
+            smoothAcceleration(huskyBot.rearLeftDrive, rearLeftVelocity, HuskyBot.VELOCITY_CONSTANT/5);
+            smoothAcceleration(huskyBot.frontRightDrive, frontRightVelocity, HuskyBot.VELOCITY_CONSTANT/5);
+            smoothAcceleration(huskyBot.rearRightDrive, rearRightVelocity, HuskyBot.VELOCITY_CONSTANT/5);
 
             //standard method of setting velocity
 //            huskyBot.frontLeftDrive.setVelocity(frontLeftVelocity);
