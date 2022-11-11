@@ -51,17 +51,21 @@ public class HuskyTeleOpMode extends LinearOpMode {
     boolean finalRumbled = false;
 
 
-    // method to smoothly accelerate a motor given a target speed. may reduce jerk (NEEDS TESTING)
+    // method to smoothly accelerate a motor given a target velocity.
     void smoothAcceleration(DcMotorEx motor, double targetVel, double accelRate) {
         double currentVel = motor.getVelocity();
         double changeVel = 0;
 
-        // check if currentVel is close to targetVel. if it is, don't change the velocity.
+        // check if currentVel is close to targetVel. if it is, set velocity directly to the target.
         if (Math.abs(currentVel - targetVel) < accelRate) {
             currentVel = targetVel;
         }
-        // set change in velocity based on if currentVel is higher or lower than targetVel.
         else {
+        // if motor is decelerating (approaching 0 vel), increase deceleration rate.
+            if (Math.abs(currentVel) > Math.abs(targetVel)) {
+                accelRate *= 2;
+            }
+        // set +/- changeVel based on if currentVel is lower or higher than targetVel.
             changeVel = (currentVel < targetVel) ? accelRate : -accelRate;
         }
 
