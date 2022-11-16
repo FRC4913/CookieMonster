@@ -29,14 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_EXTENSION_MAX_POWER;
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_LIFT_MAX_POWER;
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_LIFT_MIN_POWER;
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_LIFT_POWER_AT_REST;
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_SWIVEL_MAX_POWER;
-import static org.firstinspires.ftc.teamcode.HuskyBot.CLAW_GRAB_CLOSE_POSITION;
-import static org.firstinspires.ftc.teamcode.HuskyBot.CLAW_GRAB_OPEN_POSITION;
-import static org.firstinspires.ftc.teamcode.HuskyBot.CLAW_LIFT_START_POSITION;
+import static org.firstinspires.ftc.teamcode.HuskyBot.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -46,20 +39,17 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name = "Husky TeleOpMode", group = "TeleOp")
 public class HuskyTeleOpMode extends LinearOpMode {
 
-    private ElapsedTime runtime = new ElapsedTime();
-
-    HuskyBot huskyBot = new HuskyBot();
-
     final double END_GAME_TIME = 80.0;  // last 40 seconds
     final double FINAL_TIME = 110.0;    // last 10 seconds
+    HuskyBot huskyBot = new HuskyBot();
     boolean endGameRumbled = false;
     boolean finalRumbled = false;
-
     double armSwivelPower = 0.0;
     double armExtendPower = 0.0;
     double armLiftPower = 0.0;
     double clawRotatePosition, clawRotateCurrentPosition;
-    double clawLiftPosition ,clawLiftCurrentPosition;
+    double clawLiftPosition, clawLiftCurrentPosition;
+    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -78,12 +68,12 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if ((runtime.seconds() > END_GAME_TIME) && !endGameRumbled)  {
+            if ((runtime.seconds() > END_GAME_TIME) && !endGameRumbled) {
                 gamepad1.rumble(1000);
                 endGameRumbled = true;
             }
 
-            if ((runtime.seconds() > FINAL_TIME) && !finalRumbled)  {
+            if ((runtime.seconds() > FINAL_TIME) && !finalRumbled) {
                 gamepad1.rumble(1000);
                 finalRumbled = true;
             }
