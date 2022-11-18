@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.HuskyBot.CLAW_GRAB_OPEN_POSITION;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
@@ -88,6 +90,9 @@ public class HuskyAuto extends HuskyAutoBase {
         }
 
         telemetry.update();
+
+        // Open the claw before moving forward
+        huskyBot.clawGrab.setPosition(CLAW_GRAB_OPEN_POSITION);
 
         if (this.parkLocation == Location.LOCATION_1) {
             // If the park location is 1, park at location 1
