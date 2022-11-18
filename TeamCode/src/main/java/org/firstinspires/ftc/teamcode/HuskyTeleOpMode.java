@@ -101,12 +101,12 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
 
             // arm/claw mechanisms
-            // todo + IMPORTANT: we will have to limit this to rotate only 240 degrees once the arm is added.
-            armSwivelPower = gamepad2.left_stick_x/2;
+            // todo + IMPORTANT: we will have to limit this to rotate only 240 degrees once the arm is added. //
+            armSwivelPower = gamepad2.left_stick_x/3;
             armSwivelPower = Range.clip(armSwivelPower, -ARM_SWIVEL_MAX_POWER, ARM_SWIVEL_MAX_POWER);
             huskyBot.armSwivel.setPower(armSwivelPower);
 
-            armLiftPower = -gamepad2.left_stick_y/2;
+            armLiftPower = -gamepad2.left_stick_y/3;
             // todo: this will have to be tuned for stability
             armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MAX_POWER, ARM_LIFT_MAX_POWER);
             if (armLiftPower == 0) {
@@ -141,7 +141,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
             // Dividing by four should account for the radius differences of both the spins, but it needs to be tested.
             if(huskyBot.armLift.getPower() != 0)
             {
-                clawLiftPosition = -huskyBot.armLift.getCurrentPosition()/4;
+                clawLiftPosition = -huskyBot.armLift.getCurrentPosition();
             }
 
             huskyBot.clawLift.setPosition(clawLiftPosition);

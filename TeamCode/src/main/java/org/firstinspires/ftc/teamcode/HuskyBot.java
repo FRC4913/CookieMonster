@@ -67,7 +67,7 @@ public class HuskyBot {
     public static final double ARM_SWIVEL_LIMIT = 200;
     public static final double ARM_LIFT_MAX_POWER = 0.4;
     public static final double ARM_LIFT_POWER_AT_REST = 0.1;
-    public static final double ARM_EXTENSION_MAX_POWER = 0.4;
+    public static final double ARM_EXTENSION_MAX_POWER = 0.5;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -106,7 +106,7 @@ public class HuskyBot {
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         rearLeftDrive.setDirection(DcMotor.Direction.REVERSE);
 
-        // Set all motors to zero power
+        // Set all motors to zero power //
         frontLeftDrive.setPower(0);
         rearLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
