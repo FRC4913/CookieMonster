@@ -36,7 +36,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-
 /**
  * This is NOT an opmode.
  * <p>
@@ -68,13 +67,12 @@ public class HuskyBot {
     // https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/
     public static final double VELOCITY_CONSTANT = 537.7 * 312/60;
 
-
+    public static final double ARM_SWIVEL_MAX_POWER = 0.4;
+    public static final double ARM_SWIVEL_LIMIT = 200;
     public static final double ARM_LIFT_MAX_POWER = 0.25;
     public static final double ARM_LIFT_MIN_POWER = 0.01;
     public static final double ARM_LIFT_POWER_AT_REST = 0.05;
     public static final double ARM_EXTENSION_MAX_POWER = 0.4;
-    public static final double ARM_SWIVEL_MAX_POWER = 0.4;
-    public static final double ARM_SWIVEL_LIMIT = 200;
 
     public static final double CLAW_MOVE_INCREMENT = 0.01;
 
