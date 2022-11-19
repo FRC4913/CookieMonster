@@ -72,11 +72,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
         motor.setVelocity(currentVel + changeVel);
     }
 
-    double clawRotationPosition = 0.0;
-    double clawLiftPosition = 0.0;
-
-    double MIN_ARM_POWER = 0.1;
-
     @Override
     public void runOpMode() {
         huskyBot.init(hardwareMap);
