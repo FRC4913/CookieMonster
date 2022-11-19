@@ -31,15 +31,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import org.openftc.easyopencv.OpenCvWebcam;
 
 
 /**
@@ -60,11 +55,11 @@ public class HuskyBot {
     public DcMotorEx armLiftMotor = null;
     public DcMotorEx armExtendMotor = null;
 
-
     // Claw (on the Arm) Servo Init.
     public Servo clawLift = null;
     public Servo clawRotate = null;
     public Servo clawGrab = null; // TODO: set this to be fixed open/close positions.
+
 
     public static final double ARM_LIFT_MAX_POWER = 0.25;
     public static final double ARM_LIFT_MIN_POWER = 0.01;
@@ -87,6 +82,10 @@ public class HuskyBot {
     public static final double CLAW_GRAB_MAX_RANGE = 0.54;
     public static final double CLAW_GRAB_OPEN_POSITION = 0.3;
     public static final double CLAW_GRAB_CLOSE_POSITION = 1.0;
+
+    // Webcam
+    public OpenCvWebcam webcam;
+
     // goBILDA 5203 Series Yellow Jacket Planetary Gear Motor
     // max encoder ticks per second
     // https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/
@@ -121,7 +120,6 @@ public class HuskyBot {
         clawLift = hwMap.get(Servo.class, "claw_lift");
         clawGrab = hwMap.get(Servo.class, "claw_grab");
 
-
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -151,6 +149,7 @@ public class HuskyBot {
         clawRotate.scaleRange(CLAW_ROTATE_MIN_RANGE, CLAW_ROTATE_MAX_RANGE);
         clawLift.scaleRange(CLAW_LIFT_MIN_RANGE, CLAW_LIFT_MAX_RANGE);
         clawGrab.scaleRange(CLAW_GRAB_MIN_RANGE, CLAW_GRAB_MAX_RANGE);
+
         // this base configuration sets the drive motors to run without encoders and the arm motor
         // to run with encoder. if any opmode requires different setting, that should be changed in
         // the opmode itself
@@ -188,3 +187,5 @@ public class HuskyBot {
         }
     }
 }
+
+
