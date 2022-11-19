@@ -137,7 +137,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
 //            else if (armLiftPower < 0) {
 //                huskyBot.armLiftMotor.setPower(ARM_LIFT_MIN_POWER);
 //            }
-
             else {
                 huskyBot.armLiftMotor.setPower(armLiftPower);
             }
@@ -175,7 +174,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
             if (gamepad2.left_trigger != 0) {
                 huskyBot.servoMove(huskyBot.clawGrab, gamepad2.left_trigger);
             }
-
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Stick", "y (%.2f), x (%.2f), rx (%.2f)", y, x, rx);
