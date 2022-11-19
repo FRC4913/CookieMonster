@@ -157,7 +157,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
             }
             if (gamepad2.a) {
                 huskyBot.clawGrab.setPosition(0.3);
-            }
+            }//
 
             if (-gamepad2.right_stick_x != 0) {
                 huskyBot.servoMove(huskyBot.clawRotate, -gamepad2.right_stick_x);

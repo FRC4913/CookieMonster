@@ -55,7 +55,7 @@ public class HuskyBot {
     public DcMotorEx armLiftMotor = null;
     public DcMotorEx armExtendMotor = null;
 
-    // Claw (on the Arm) Servo Init.
+    // Claw (on the Arm) Servo Init. //
     public Servo clawLift = null;
     public Servo clawRotate = null;
     public Servo clawGrab = null; // TODO: set this to be fixed open/close positions.
