@@ -69,6 +69,28 @@ public class HuskyBot {
     public static final double VELOCITY_CONSTANT = 537.7 * 312/60;
 
 
+    public static final double ARM_LIFT_MAX_POWER = 0.25;
+    public static final double ARM_LIFT_MIN_POWER = 0.01;
+    public static final double ARM_LIFT_POWER_AT_REST = 0.05;
+    public static final double ARM_EXTENSION_MAX_POWER = 0.4;
+    public static final double ARM_SWIVEL_MAX_POWER = 0.4;
+    public static final double ARM_SWIVEL_LIMIT = 200;
+
+    public static final double CLAW_MOVE_INCREMENT = 0.01;
+
+    public static final double CLAW_LIFT_MIN_RANGE = 0.3;
+    public static final double CLAW_LIFT_MAX_RANGE = 0.8;
+    public static final double CLAW_LIFT_START_POSITION = 1.0;   // scaled, see MIN and MAX_RANGE
+
+    public static final double CLAW_ROTATE_MIN_RANGE = 0.1;
+    public static final double CLAW_ROTATE_MAX_RANGE = 0.8;
+    public static final double CLAW_ROTATE_START_POSITION = 1.0;   // scaled, see MIN and MAX_RANGE
+
+    public static final double CLAW_GRAB_MIN_RANGE = 0.1;
+    public static final double CLAW_GRAB_MAX_RANGE = 0.54;
+    public static final double CLAW_GRAB_OPEN_POSITION = 0.3;
+    public static final double CLAW_GRAB_CLOSE_POSITION = 1.0;
+
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
