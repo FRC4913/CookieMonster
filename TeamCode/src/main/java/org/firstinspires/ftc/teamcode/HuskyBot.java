@@ -134,12 +134,14 @@ public class HuskyBot {
 
         // Set all arm-related motors and servos to zero power.
         armSwivelMotor.setPower(0);
+
         armExtendMotor.setPower(0);
         clawRotate.setPosition(0.1);
 
         armSwivelMotor.setPower(0);
 
         armLiftMotor.setPower(0);
+
         armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         armExtendMotor.setPower(0);
@@ -172,6 +174,16 @@ public class HuskyBot {
         rearRightDrive.setVelocityPIDFCoefficients(1.27, 0.127, 0, 12.7);
         rearRightDrive.setPositionPIDFCoefficients(5.0);
 
+    }
+
+    public void servoMove(Servo servo, double targetPosition) {
+        double currentPosition = servo.getPosition();
+        if (targetPosition > 0) {
+            servo.setPosition(currentPosition + CLAW_MOVE_INCREMENT);
+        }
+        else if (targetPosition < 0) {
+            servo.setPosition(currentPosition - CLAW_MOVE_INCREMENT);
+        }
     }
 
     public void servoMove(Servo servo, double targetPosition) {

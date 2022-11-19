@@ -60,11 +60,13 @@ public class HuskyTeleOpMode extends LinearOpMode {
             currentVel = targetVel;
         }
         else {
+
             // if motor is decelerating (approaching 0 vel), increase deceleration rate.
             if (Math.abs(currentVel) > Math.abs(targetVel)) {
                 accelRate *= 2;
             }
             // set +/- changeVel based on if currentVel is lower or higher than targetVel.
+
             changeVel = (currentVel < targetVel) ? accelRate : -accelRate;
         }
 
@@ -153,6 +155,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
             if (gamepad2.a) {
                 huskyBot.clawGrab.setPosition(0.3);
             }//
+
 
             if (-gamepad2.right_stick_x != 0) {
                 huskyBot.servoMove(huskyBot.clawRotate, -gamepad2.right_stick_x);
