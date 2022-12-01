@@ -70,7 +70,7 @@ public class HuskyAutoBase extends LinearOpMode {
     double cy = 221.506;
 
     // UNITS ARE METERS
-    double aprilTagSize = 0.166;
+    double aprilTagSize = 0.02794;
 
     // Apriltag ID 1, 2, 3 from the 36h11 family
     final int LOCATION_1_TAG_ID = 1;
