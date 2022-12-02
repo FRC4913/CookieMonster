@@ -39,8 +39,6 @@ import java.util.ArrayList;
 
 @Autonomous(name = "Auto", group = "Auto", preselectTeleOp = "Husky TeleOpMode")
 public class HuskyAuto extends HuskyAutoBase {
-    boolean tagFound = false;
-
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
@@ -57,39 +55,18 @@ public class HuskyAuto extends HuskyAutoBase {
 
         runtime.reset();
 
-        // get the park location with timeout of 5 seconds.
-        while (opModeIsActive() && (runtime.seconds() < 5)) {
-            ArrayList<AprilTagDetection> currentDetections = pipeline.getLatestDetections();
+        this.parkLocation = getParkLocation();
 
-            if(currentDetections.size() != 0) {
-                for(AprilTagDetection tag : currentDetections) {
-                    switch (tag.id){
-                        case LOCATION_1_TAG_ID:
-                            this.tagFound = true;
-                            this.parkLocation = Location.LOCATION_1;
-                            break;
-                        case LOCATION_2_TAG_ID:
-                            this.tagFound = true;
-                            this.parkLocation = Location.LOCATION_2;
-                            break;
-                        case LOCATION_3_TAG_ID:
-                            this.tagFound = true;
-                            this.parkLocation = Location.LOCATION_3;
-                            break;
-                    }
-                }
-            }
-
-            sleep(50);
-        }
-
-        if(this.tagFound)
+        if(this.parkLocation != Location.LOCATION_0)
             telemetry.addLine("Found the tag! Parking at location " + this.parkLocation);
         else{
-            // Set the park location to 2 if it couldn't detect the apriltag.
-            this.parkLocation = Location.LOCATION_2;
-            telemetry.addLine("Couldn't find the tag! Parking at location 2 (33.3% chance :D) " + this.parkLocation);
+            encoderStrafe(AUTO_STRAFE_SPEED, BACKUP_STRAFE_DISTANCE, 2);
+            this.parkLocation = getParkLocation();
         }
+
+        // Set the park location to 2 if it couldn't detect the apriltag.
+        if(this.parkLocation == Location.LOCATION_0)
+            this.parkLocation = Location.LOCATION_2;
 
         telemetry.update();
 
