@@ -61,8 +61,6 @@ public class HuskyAutoBase extends LinearOpMode {
     public static final double AUTO_STRAFE_SPEED = 0.5;
     public static final int TURN_TRAVEL_INCHES = 19;
 
-    public static int INIT_WAIT_SECS = 0;
-
     // Lens intrinsics
     // UNITS ARE PIXELS
     // The intrinsics only matter if we are utilizing the translation and rotation values of the April tag, which we don't need in this game.
@@ -82,7 +80,6 @@ public class HuskyAutoBase extends LinearOpMode {
 
     public static double FORWARD_DISTANCE = 28;
     public static double STRAFE_DISTANCE = 26;
-
     public static double BACKUP_STRAFE_DISTANCE = 8;
 
     OpenCVPipeline pipeline;

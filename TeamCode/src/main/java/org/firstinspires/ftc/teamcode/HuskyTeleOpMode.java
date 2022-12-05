@@ -49,6 +49,9 @@ public class HuskyTeleOpMode extends LinearOpMode {
     double armExtendPower = 0.0;
     double armLiftPower = 0.0;
     double armLiftPowerDivider = 4;
+
+    double clawLevel = 0.9;
+
     private ElapsedTime runtime = new ElapsedTime();
 
     // method to smoothly accelerate a motor given a target velocity.
@@ -93,7 +96,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
         huskyBot.clawLift.setPosition(CLAW_LIFT_START_POSITION);
         huskyBot.clawGrab.setPosition(CLAW_GRAB_CLOSE_POSITION);
-        huskyBot.clawRotate.setPosition(CLAW_ROTATE_START_POSITION);
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -164,14 +166,19 @@ public class HuskyTeleOpMode extends LinearOpMode {
                 huskyBot.armLiftMotor.setPower(0);
             }
 
+            //equilibrium code
+            if(gamepad2.right_stick_y == 0){
+                huskyBot.clawLift.setPosition(((huskyBot.armLiftMotor.getCurrentPosition() * -0.89)/ARM_LIFT_MAX_POSITION) + clawLevel);
+            }
+            if(gamepad2.right_stick_y > 0){
+                clawLevel += 0.1;
+            } else{
+                clawLevel -=0.1;
+            }
 
             // Increases/Decreases Arm Length
             armExtendPower = gamepad2.dpad_up ? -ARM_EXTENSION_MAX_POWER : (gamepad2.dpad_down ? ARM_EXTENSION_MAX_POWER : 0);
             huskyBot.armExtendMotor.setPower(armExtendPower);
-
-            if (-gamepad2.right_stick_x != 0) {
-                huskyBot.servoMove(huskyBot.clawRotate, -gamepad2.right_stick_x);
-            }
 
             if (gamepad2.right_stick_y != 0) {
                 huskyBot.servoMove(huskyBot.clawLift, -gamepad2.right_stick_y);
@@ -208,7 +215,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
                     gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
             telemetry.addData("Arm Extend", "Power: (%.2f), Pos: (%d)",
                     huskyBot.armExtendMotor.getPower(), huskyBot.armExtendMotor.getCurrentPosition());
-            telemetry.addData("Claw Rotate", "Left X: (%.2f), Pos: (%.2f)", gamepad2.right_stick_x, huskyBot.clawRotate.getPosition());
             telemetry.addData("Claw Lift", "Right Y: (%.2f), Pos: (%.2f)",
                     gamepad2.right_stick_y, huskyBot.clawLift.getPosition());
             telemetry.addData("Claw Grab", "Pos: (%.2f)", huskyBot.clawGrab.getPosition());
