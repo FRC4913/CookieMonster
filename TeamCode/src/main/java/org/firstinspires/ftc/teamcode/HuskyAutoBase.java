@@ -78,8 +78,8 @@ public class HuskyAutoBase extends LinearOpMode {
     final int LOCATION_2_TAG_ID = 2;
     final int LOCATION_3_TAG_ID = 3;
 
-    public static double FORWARD_DISTANCE = 28;
-    public static double STRAFE_DISTANCE = 26;
+    public static double FORWARD_DISTANCE = 29;
+    public static double STRAFE_DISTANCE = 27;
     public static double BACKUP_STRAFE_DISTANCE = 8;
 
     OpenCVPipeline pipeline;

@@ -55,7 +55,6 @@ public class HuskyAuto extends HuskyAutoBase {
             this.parkLocation = Location.LOCATION_2;
         }
 
-
         switch (this.parkLocation){
             case LOCATION_1:
                 encoderDrive(AUTO_DRIVE_SPEED, FORWARD_DISTANCE, 2);
