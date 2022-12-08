@@ -76,11 +76,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
         motor.setVelocity(currentVel + changeVel);
     }
 
-    /*public void bReset()
-    {
-      Get Encoder
-    }*/
-
+    // Sets Arm Position to Encoder Values for Ease of Lifing Cones
     void setArmPosition(double timeoutSecs, int armLiftPos, double clawLiftPos, int armExtendPos){
         huskyBot.armLiftMotor.setTargetPosition(armLiftPos);
         huskyBot.clawLift.setPosition(clawLiftPos);
@@ -211,7 +207,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
                 huskyBot.armLiftMotor.setPower(0);
             }
 
-            /*
+            /* Failed Power Method, will test further after Saturday meet.
             double powertemp = Math.cos(Math.abs(huskyBot.armLiftMotor.getCurrentPosition() - ARM_ZERO_POSITION) * 100 / (ARM_LIFT_MAX_POSITION - 49));
             powertemp /= 5;
             double power = gamepad2.left_stick_y < 0 ? -powertemp : powertemp;
@@ -256,6 +252,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
             if (gamepad2.left_trigger != 0) {
                 huskyBot.servoMove(huskyBot.clawGrab, gamepad2.left_trigger);
             }
+
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Stick", "y (%.2f), x (%.2f), rx (%.2f)", y, x, rx);
