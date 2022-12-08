@@ -63,7 +63,7 @@ public class HuskyBot {
     public Servo clawGrab = null; // TODO: set this to be fixed open/close positions.
 
     // Webcam
-   // public OpenCvWebcam webcam;
+    public OpenCvWebcam webcam;
 
     // Magnetic Limit Switches
     public TouchSensor armExtendMax = null;
