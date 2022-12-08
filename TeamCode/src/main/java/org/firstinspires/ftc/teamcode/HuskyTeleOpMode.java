@@ -52,6 +52,9 @@ public class HuskyTeleOpMode extends LinearOpMode {
     double armLiftPower = 0.0;
 
     double armLiftPowerDivider = 4;
+
+    double clawLevel = 0.9;
+
     private ElapsedTime runtime = new ElapsedTime();
 
     // method to smoothly accelerate a motor given a target velocity.
@@ -75,6 +78,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
         // change the velocity of the motor (accelerate) based on changeVel.
         motor.setVelocity(currentVel + changeVel);
     }
+
 
     // Sets Arm Position to Encoder Values for Ease of Lifing Cones
     void setArmPosition(double timeoutSecs, int armLiftPos, double clawLiftPos, int armExtendPos){
@@ -100,6 +104,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
     }
 
 
+
     @Override
     public void runOpMode() {
         huskyBot.init(hardwareMap);
@@ -113,8 +118,8 @@ public class HuskyTeleOpMode extends LinearOpMode {
         double y, x, rx;
 
         huskyBot.clawLift.setPosition(CLAW_LIFT_START_POSITION);
-        //huskyBot.clawGrab.setPosition(CLAW_GRAB_CLOSE_POSITION);
-       // huskyBot.clawRotate.setPosition(CLAW_ROTATE_START_POSITION);
+        huskyBot.clawGrab.setPosition(CLAW_GRAB_CLOSE_POSITION);
+   
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -177,8 +182,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
             }
             huskyBot.armSwivelMotor.setPower(armSwivelPower);
 
-
-
            // arm lift controls
            if(gamepad2.left_stick_y > 0){
                 armLiftPowerDivider = 5.0;
@@ -201,11 +204,23 @@ public class HuskyTeleOpMode extends LinearOpMode {
                 else {
                     huskyBot.armLiftMotor.setPower(armLiftPower + ARM_LIFT_POWER_AT_REST);
                 }
+             }
+            
+            /* Failed Arm-Claw Equilibrium Code, will test further after Saturday Meet.
+            //equilibrium code
+            if(gamepad2.right_stick_y == 0){
+                huskyBot.clawLift.setPosition(((huskyBot.armLiftMotor.getCurrentPosition() * -0.89)/ARM_LIFT_MAX_POSITION) + clawLevel);
+            }
+            if(gamepad2.right_stick_y > 0){
+                clawLevel += 0.1;
+            } else{
+                clawLevel -=0.1;
+
             }
             else
             {
                 huskyBot.armLiftMotor.setPower(0);
-            }
+            } */
 
             /* Failed Power Method, will test further after Saturday meet.
             double powertemp = Math.cos(Math.abs(huskyBot.armLiftMotor.getCurrentPosition() - ARM_ZERO_POSITION) * 100 / (ARM_LIFT_MAX_POSITION - 49));
@@ -233,6 +248,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
 
             // Claw Lift Servo Control
+
             if (gamepad2.right_stick_y != 0) {
                 huskyBot.servoMove(huskyBot.clawLift, -gamepad2.right_stick_y);
             }
@@ -272,7 +288,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
                     gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
             telemetry.addData("Arm Extend", "Power: (%.2f), Pos: (%d)",
                     huskyBot.armExtendMotor.getPower(), huskyBot.armExtendMotor.getCurrentPosition());
-           // telemetry.addData("Claw Rotate", "Left X: (%.2f), Pos: (%.2f)", gamepad2.right_stick_x, huskyBot.clawRotate.getPosition());
             telemetry.addData("Claw Lift", "Right Y: (%.2f), Pos: (%.2f)",
                     gamepad2.right_stick_y, huskyBot.clawLift.getPosition());
             telemetry.addData("Claw Grab", "Pos: (%.2f)", huskyBot.clawGrab.getPosition());

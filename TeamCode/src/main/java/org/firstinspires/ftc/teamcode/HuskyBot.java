@@ -59,7 +59,6 @@ public class HuskyBot {
 
     // Claw (on the Arm) Servo Init.
     public Servo clawLift = null;
-    public Servo clawRotate = null;
     public Servo clawGrab = null; // TODO: set this to be fixed open/close positions.
 
     // Webcam
@@ -75,11 +74,13 @@ public class HuskyBot {
     public static final double VELOCITY_CONSTANT = 537.7 * 312/60;
 
 
+
     public static final double ARM_SWIVEL_MAX_POWER = 0.35;
     public static final double ARM_LIFT_MAX_POWER = 0.5;
     public static final double ARM_LIFT_MIN_POWER = 0.01;
     public static final double ARM_LIFT_POWER_AT_REST = 0.134;
     public static final double ARM_SWIVEL_LIMIT = 570;
+
 
     public static final double ARM_ZERO_POSITION = 350;
 
@@ -120,7 +121,7 @@ public class HuskyBot {
         armExtendMotor = hwMap.get(DcMotorEx.class, "arm_extend");
 
         // Define and Init. Claw Servos
-        //clawRotate = hwMap.get(Servo.class, "claw_rotate");
+
         clawLift = hwMap.get(Servo.class, "claw_lift");
         clawGrab = hwMap.get(Servo.class, "claw_grab");
 
@@ -151,7 +152,7 @@ public class HuskyBot {
 
         armExtendMotor.setPower(0);
 
-        //clawRotate.scaleRange(CLAW_ROTATE_MIN_RANGE, CLAW_ROTATE_MAX_RANGE);
+
         clawLift.scaleRange(CLAW_LIFT_MIN_RANGE, CLAW_LIFT_MAX_RANGE);
         clawGrab.scaleRange(CLAW_GRAB_MIN_RANGE, CLAW_GRAB_MAX_RANGE);
 
