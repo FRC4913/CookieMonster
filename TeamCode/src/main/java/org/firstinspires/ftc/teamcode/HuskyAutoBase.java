@@ -106,7 +106,7 @@ public class HuskyAutoBase extends LinearOpMode {
         huskyBot.webcam.setMillisecondsPermissionTimeout(2500); // Timeout for obtaining permission is configurable. Set before opening.
         huskyBot.webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened() { huskyBot.webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT); }
+            public void onOpened() { huskyBot.webcam.startStreaming(1280,720, OpenCvCameraRotation.UPRIGHT); }
 
             @Override
             public void onError(int errorCode) { }
@@ -126,6 +126,9 @@ public class HuskyAutoBase extends LinearOpMode {
         // target is same for all motors
         int target = (int) (distanceInches * COUNTS_PER_INCH);
         driveToTarget(speed, target, target, target, target, timeoutSecs);
+
+        // Wait after move is complete
+        sleep(250);
     }
 
     public void encoderTurn(double speed, double angleDegrees, double timeoutSecs) {
@@ -150,6 +153,9 @@ public class HuskyAutoBase extends LinearOpMode {
         // Determine new target position, and pass to motor controller
         int target = (int) (distanceInches * COUNTS_PER_INCH);
         driveToTarget(speed, (int) (target * 1.2), (int) (-target * 1.1), -target, target, timeoutSecs);
+
+        // Wait after move is complete
+        sleep(250);
     }
 
     private void resetDriveEncoders() {
