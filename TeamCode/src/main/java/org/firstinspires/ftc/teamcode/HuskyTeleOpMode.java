@@ -155,14 +155,14 @@ public class HuskyTeleOpMode extends LinearOpMode {
             //OTHER CONTROLS --------------------------------------------------------------------------------------------
 
             // arm encoder preset values
-            if(gamepad1.dpad_up)
-                setArmPosition(2, -105, 0.9, -20);
-            if(gamepad1.dpad_left)
-                setArmPosition(2, 396, 0.45, -10);
-            if(gamepad1.dpad_down)
-                setArmPosition(2, 655, 0, -60);
-            if(gamepad2.dpad_right)
-                setArmPosition(2, 858, 0.15, -75);
+            if(gamepad1.y)
+                setArmPosition(2, -115, 0.9, -20);
+            if(gamepad1.x)
+                setArmPosition(2, 473, -10, -10);
+            if(gamepad1.a)
+                setArmPosition(2, 846, 0.25, -50);
+            if(gamepad1.b)
+                setArmPosition(2, 924, 0.35, -80);
 
 
 
@@ -199,7 +199,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
 //                huskyBot.armLiftMotor.setPower(ARM_LIFT_MIN_POWER);
 //            }
                 else {
-                    huskyBot.armLiftMotor.setPower(armLiftPower);
+                    huskyBot.armLiftMotor.setPower(armLiftPower + ARM_LIFT_POWER_AT_REST);
                 }
             }
             else
