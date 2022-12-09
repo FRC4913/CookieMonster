@@ -48,6 +48,8 @@ public class HuskyTeleOpMode extends LinearOpMode {
     boolean endGameRumbled = false;
     boolean finalRumbled = false;
     double armLiftPower = 0.0;
+    // todo: check if the related arm lift mechanism works
+//    double armLiftPosChange = 0;
 
     double armLiftPowerDivider = 4;
 
@@ -104,6 +106,15 @@ public class HuskyTeleOpMode extends LinearOpMode {
                 }
             }
 
+            // todo: check if this mechanism works/can replace our current arm lift controls
+            // Alternative Arm Lift Control: run to position
+            // adjusts arm lift angle based on motor position, instead of power.
+//            huskyBot.armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            armLiftPosChange = 20 * gamepad2.left_stick_y;
+//            if(huskyBot.armLiftMotor.getCurrentPosition() > ARM_LIFT_MAX_POSITION) {
+//                armLiftPosChange = (armLiftPosChange > 0) ? 0 : armLiftPosChange;
+//            }
+//            huskyBot.armLiftMotor.setTargetPosition( (int)armLiftPosChange + huskyBot.armLiftMotor.getCurrentPosition());
 
 
             telemetry.addData("Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)",
