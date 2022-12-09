@@ -163,11 +163,11 @@ public class HuskyTeleOpMode extends LinearOpMode {
             if(gamepad1.y)
                 setArmPosition(2, -115, 0.9, -20);
             if(gamepad1.x)
-                setArmPosition(2, 473, -10, -10);
+                setArmPosition(2, 473, 0.40, -10);
             if(gamepad1.a)
                 setArmPosition(2, 846, 0.25, -50);
             if(gamepad1.b)
-                setArmPosition(2, 924, 0.35, -80);
+                setArmPosition(2,  ((int) ARM_LIFT_MAX_POSITION), 0.35, -80);
 
 
 
