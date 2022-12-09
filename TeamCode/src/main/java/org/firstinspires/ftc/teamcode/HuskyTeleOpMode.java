@@ -84,30 +84,27 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
             // ALL OTHER MECHANISMS REMOVED FOR ARM LIFT TESTING
 
-           // arm lift controls
-           if(gamepad2.left_stick_y > 0){
+            // Arm Lift Controls
+            if(gamepad2.left_stick_y > 0){
                 armLiftPowerDivider = 5.0;
             } else{
                 armLiftPowerDivider = 3.5 - (huskyBot.armLiftMotor.getCurrentPosition()/ARM_LIFT_MAX_POSITION);
             }
 
-           armLiftPower = -gamepad2.left_stick_y/armLiftPowerDivider;
-           armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
+            armLiftPower = -gamepad2.left_stick_y/armLiftPowerDivider;
+            armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
 
             // Arm Lift Motor
             if(huskyBot.armLiftMotor.getCurrentPosition() < ARM_LIFT_MAX_POSITION)
             {
                 if (armLiftPower == 0) {
                     huskyBot.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
-                }
-//            else if (armLiftPower < 0) {
-//                huskyBot.armLiftMotor.setPower(ARM_LIFT_MIN_POWER);
-//            }
-                else {
+                } else {
                     huskyBot.armLiftMotor.setPower(armLiftPower + ARM_LIFT_POWER_AT_REST);
                 }
-             }
-            
+            }
+
+
 
             telemetry.addData("Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)",
                     gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
