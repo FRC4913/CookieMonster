@@ -81,26 +81,26 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
 
     // Sets Arm Position to Encoder Values for Ease of Lifing Cones
-    void setArmPosition(double timeoutSecs, int armLiftPos, double clawLiftPos, int armExtendPos){
+    void setArmPosition(int armLiftPos, double clawLiftPos, int armExtendPos){
         huskyBot.armLiftMotor.setTargetPosition(armLiftPos);
         huskyBot.clawLift.setPosition(clawLiftPos);
-
-        //todo tune
         huskyBot.armExtendMotor.setTargetPosition(armExtendPos);
 
         huskyBot.armExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         huskyBot.armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        huskyBot.armExtendMotor.setPower(ARM_EXTENSION_MAX_POWER);
 
         runtime.reset();
 
-        while (opModeIsActive() &&
-                (runtime.seconds() < timeoutSecs) &&
-                (huskyBot.armLiftMotor.isBusy())) {
+        while (opModeIsActive() && (huskyBot.armLiftMotor.isBusy())) {
         }
+
+        huskyBot.armExtendMotor.setPower(0);
 
         huskyBot.armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         huskyBot.armLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
 
@@ -161,19 +161,20 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
             // arm encoder preset values
             if(gamepad1.y)
-                setArmPosition(2, -115, 0.9, -20);
+                setArmPosition(-115, 0.9, -1414);
             if(gamepad1.x)
-                setArmPosition(2, 473, 0.40, -10);
+                setArmPosition(473, 0.55, 0);
             if(gamepad1.a)
-                setArmPosition(2, 846, 0.25, -50);
+                setArmPosition(846, 0.10, -1000);
             if(gamepad1.b)
-                setArmPosition(2,  ((int) ARM_LIFT_MAX_POSITION), 0.35, -80);
+                setArmPosition(((int) ARM_LIFT_MAX_POSITION), 0.35, -3240);
 
 
 
-            // arm swivel controls
+            // Arm Swivel Controls
             armSwivelPower = -gamepad2.left_stick_x;
             armSwivelPower = Range.clip(armSwivelPower, -ARM_SWIVEL_MAX_POWER, ARM_SWIVEL_MAX_POWER);
+            // swivel limiters
             if (huskyBot.armSwivelMotor.getCurrentPosition() <= -ARM_SWIVEL_LIMIT) {
                 armSwivelPower = (armSwivelPower < 0) ? 0 : armSwivelPower;
             }
@@ -182,7 +183,9 @@ public class HuskyTeleOpMode extends LinearOpMode {
             }
             huskyBot.armSwivelMotor.setPower(armSwivelPower);
 
-           // arm lift controls
+
+
+           // Arm Lift Controls
            if(gamepad2.left_stick_y > 0){
                 armLiftPowerDivider = 5.0;
             } else{
@@ -205,6 +208,10 @@ public class HuskyTeleOpMode extends LinearOpMode {
                     huskyBot.armLiftMotor.setPower(armLiftPower + ARM_LIFT_POWER_AT_REST);
                 }
              }
+//            else {
+//                armLiftPower = (armLiftPower > 0) ? 0 : armLiftPower;
+//                huskyBot.armLiftMotor.setPower(armLiftPower);
+//            }
             
             /* Failed Arm-Claw Equilibrium Code, will test further after Saturday Meet.
             //equilibrium code
@@ -248,16 +255,16 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
 
             // Claw Lift Servo Control
-
             if (gamepad2.right_stick_y != 0) {
                 huskyBot.servoMove(huskyBot.clawLift, -gamepad2.right_stick_y);
             }
 
+
             // Open/Close the Claw
-            if (gamepad2.x) {
+            if (gamepad2.right_bumper || gamepad1.right_bumper) {
                 huskyBot.clawGrab.setPosition(CLAW_GRAB_OPEN_POSITION);
             }
-            if (gamepad2.a) {
+            if (gamepad2.left_bumper || gamepad1.left_bumper) {
                 huskyBot.clawGrab.setPosition(CLAW_GRAB_CLOSE_POSITION);
             }
 
