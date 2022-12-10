@@ -87,24 +87,36 @@ public class HuskyTeleOpMode extends LinearOpMode {
             // ALL OTHER MECHANISMS REMOVED FOR ARM LIFT TESTING
 
             // Arm Lift Controls
-            if(gamepad2.left_stick_y > 0){
-                armLiftPowerDivider = 5.0;
-            } else{
+
+            if(gamepad2.left_stick_y < 0)
+            {   // on the way up
                 armLiftPowerDivider = 3.5 - (huskyBot.armLiftMotor.getCurrentPosition()/ARM_LIFT_MAX_POSITION);
+            }
+            else { // on the way down
+                armLiftPowerDivider = 5.5;
             }
 
             armLiftPower = -gamepad2.left_stick_y/armLiftPowerDivider;
             armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
 
-            // Arm Lift Motor
-            if(huskyBot.armLiftMotor.getCurrentPosition() < ARM_LIFT_MAX_POSITION)
-            {
-                if (armLiftPower == 0) {
-                    huskyBot.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
-                } else {
-                    huskyBot.armLiftMotor.setPower(armLiftPower + ARM_LIFT_POWER_AT_REST);
-                }
+            if (armLiftPower == 0) {
+                armLiftPower = ARM_LIFT_POWER_AT_REST;
             }
+            if (huskyBot.armLiftMotor.getCurrentPosition() > ARM_LIFT_MAX_POSITION && armLiftPower > 0) {
+                armLiftPower = 0;
+            }
+
+            huskyBot.armLiftMotor.setPower(armLiftPower);
+
+            //Arm Lift Motor
+//            if(huskyBot.armLiftMotor.getCurrentPosition() < ARM_LIFT_MAX_POSITION)
+//            {
+//                if (armLiftPower == 0) {
+//                    huskyBot.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
+//                } else {
+//                    huskyBot.armLiftMotor.setPower(armLiftPower);
+//                }
+//            }
 
             // todo: check if this mechanism works/can replace our current arm lift controls
             // Alternative Arm Lift Control: run to position
