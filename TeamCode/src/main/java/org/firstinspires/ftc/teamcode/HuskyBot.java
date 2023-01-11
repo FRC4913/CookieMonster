@@ -169,6 +169,12 @@ public class HuskyBot {
         frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        // TODO: arm encoder implementation
+        armLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armLiftMotor.setVelocityPIDFCoefficients(1.27, 0.127, 0, 12.7);
+        armLiftMotor.setPositionPIDFCoefficients(5.0);
+
 
         // https://docs.google.com/document/u/1/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/mobilebasic
         // todo these still need to be tuned

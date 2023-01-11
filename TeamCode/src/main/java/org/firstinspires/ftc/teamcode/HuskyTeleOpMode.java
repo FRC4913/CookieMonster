@@ -42,20 +42,11 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name = "Husky TeleOpMode", group = "TeleOp")
 public class HuskyTeleOpMode extends LinearOpMode {
 
-    final double END_GAME_TIME = 80.0;  // last 40 seconds
-    final double FINAL_TIME = 110.0;    // last 10 seconds
     HuskyBot huskyBot = new HuskyBot();
-    boolean endGameRumbled = false;
-    boolean finalRumbled = false;
-    double armLiftPower = 0.0;
-    // todo: check if the related arm lift mechanism works
-//    double armLiftPosChange = 0;
 
-    double armLiftPowerDivider = 4;
+    // TODO: test arm lift velocity implementation.
+    double armLiftVel;
 
-    double clawLevel = 0.9;
-
-    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -65,7 +56,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        runtime.reset();
 
 
         huskyBot.clawLift.setPosition(CLAW_LIFT_START_POSITION);
@@ -74,39 +64,30 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            if ((runtime.seconds() > END_GAME_TIME) && !endGameRumbled) {
-                gamepad1.rumble(1000);
-                endGameRumbled = true;
-            }
-
-            if ((runtime.seconds() > FINAL_TIME) && !finalRumbled) {
-                gamepad1.rumble(1000);
-                finalRumbled = true;
-            }
 
             // ALL OTHER MECHANISMS REMOVED FOR ARM LIFT TESTING
 
             // Arm Lift Controls
-
-            if(gamepad2.left_stick_y < 0)
-            {   // on the way up
-                armLiftPowerDivider = 3.5 - (huskyBot.armLiftMotor.getCurrentPosition()/ARM_LIFT_MAX_POSITION);
-            }
-            else { // on the way down
-                armLiftPowerDivider = 5.5;
-            }
-
-            armLiftPower = -gamepad2.left_stick_y/armLiftPowerDivider;
-            armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
-
-            if (armLiftPower == 0) {
-                armLiftPower = ARM_LIFT_POWER_AT_REST;
-            }
-            if (huskyBot.armLiftMotor.getCurrentPosition() > ARM_LIFT_MAX_POSITION && armLiftPower > 0) {
-                armLiftPower = 0;
-            }
-
-            huskyBot.armLiftMotor.setPower(armLiftPower);
+//
+//            if(gamepad2.left_stick_y < 0)
+//            {   // on the way up
+//                armLiftPowerDivider = 3.5 - (huskyBot.armLiftMotor.getCurrentPosition()/ARM_LIFT_MAX_POSITION);
+//            }
+//            else { // on the way down
+//                armLiftPowerDivider = 5.5;
+//            }
+//
+//            armLiftPower = -gamepad2.left_stick_y/armLiftPowerDivider;
+//            armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
+//
+//            if (armLiftPower == 0) {
+//                armLiftPower = ARM_LIFT_POWER_AT_REST;
+//            }
+//            if (huskyBot.armLiftMotor.getCurrentPosition() > ARM_LIFT_MAX_POSITION && armLiftPower > 0) {
+//                armLiftPower = 0;
+//            }
+//
+//            huskyBot.armLiftMotor.setPower(armLiftPower);
 
             //Arm Lift Motor
 //            if(huskyBot.armLiftMotor.getCurrentPosition() < ARM_LIFT_MAX_POSITION)
@@ -118,7 +99,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
 //                }
 //            }
 
-            // todo: check if this mechanism works/can replace our current arm lift controls
+
             // Alternative Arm Lift Control: run to position
             // adjusts arm lift angle based on motor position, instead of power.
 //            huskyBot.armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -129,9 +110,27 @@ public class HuskyTeleOpMode extends LinearOpMode {
 //            huskyBot.armLiftMotor.setTargetPosition( (int)armLiftPosChange + huskyBot.armLiftMotor.getCurrentPosition());
 
 
+
+            // TODO: test arm lift velocity implementation.
+            // Alternative Arm Lift Control: set velocity
+            armLiftVel = -gamepad2.left_stick_y * VELOCITY_CONSTANT/3;
+            if(huskyBot.armLiftMotor.getCurrentPosition() > ARM_LIFT_MAX_POSITION) {
+                armLiftVel = (armLiftVel > 0) ? 0 : armLiftVel;
+            }
+
+            // give power to hold arm steady if its target velocity is close to 0.
+            // otherwise, use built-in PID.
+            if (Math.abs(armLiftVel) < VELOCITY_CONSTANT/15) {
+                huskyBot.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
+            } else {
+                huskyBot.armLiftMotor.setVelocity(armLiftVel);
+            }
+
+
             telemetry.addData("Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)",
                     gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
-            telemetry.addData("Arm Lift Power Divider", armLiftPowerDivider);
+            telemetry.addData("Arm Lift Target Vel", armLiftVel);
+            telemetry.addData("Arm Lift Current Vel", huskyBot.armLiftMotor.getCurrentPosition());
             telemetry.update();
         }
     }
