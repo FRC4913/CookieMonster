@@ -53,12 +53,9 @@ public class HuskyBot {
     public DcMotorEx rearRightDrive = null;
 
     // Arm Control Motor Init.
-    public DcMotorEx armSwivelMotor = null;
     public DcMotorEx armLiftMotor = null;
-    public DcMotorEx armExtendMotor = null;
 
     // Claw (on the Arm) Servo Init.
-    public Servo clawLift = null;
     public Servo clawGrab = null; // TODO: set this to be fixed open/close positions.
 
     // Webcam
@@ -74,23 +71,13 @@ public class HuskyBot {
     public static final double VELOCITY_CONSTANT = 537.7 * 312/60;
 
 
-
-    public static final double ARM_SWIVEL_MAX_POWER = 0.35;
     public static final double ARM_LIFT_MAX_POWER = 0.5;
     public static final double ARM_LIFT_MIN_POWER = 0.01;
     public static final double ARM_LIFT_POWER_AT_REST = 0.134;
-    public static final double ARM_SWIVEL_LIMIT = 570;
-
 
     public static final double ARM_ZERO_POSITION = 350;
 
-    public static final double ARM_EXTENSION_MAX_POWER = 0.6;
     public  static  final double ARM_LIFT_MAX_POSITION = 925;
-
-    public static final double CLAW_MOVE_INCREMENT = 0.05;
-    public static final double CLAW_LIFT_MIN_RANGE = 0.3;
-    public static final double CLAW_LIFT_MAX_RANGE = 0.8;
-    public static final double CLAW_LIFT_START_POSITION = 0.9;   // scaled, see MIN and MAX_RANGE
 
     public static final double CLAW_GRAB_MIN_RANGE = 0.1;
     public static final double CLAW_GRAB_MAX_RANGE = 0.54;
@@ -116,18 +103,10 @@ public class HuskyBot {
         rearRightDrive = hwMap.get(DcMotorEx.class, "rear_right_drive");
 
         // Define and Init. Arm Motors
-        armSwivelMotor = hwMap.get(DcMotorEx.class, "arm_swivel");
         armLiftMotor = hwMap.get(DcMotorEx.class, "arm_lift");
-        armExtendMotor = hwMap.get(DcMotorEx.class, "arm_extend");
 
         // Define and Init. Claw Servos
-
-        clawLift = hwMap.get(Servo.class, "claw_lift");
         clawGrab = hwMap.get(Servo.class, "claw_grab");
-
-        // Define and Init. Magnetic Limit Switches
-        armExtendMax = hwMap.get(TouchSensor.class, "arm_extend_max");
-        armExtendMin = hwMap.get(TouchSensor.class, "arm_extend_min");
 
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -144,16 +123,11 @@ public class HuskyBot {
         rearRightDrive.setPower(0);
 
         // Set all arm-related motors and servos to zero power.
-        armSwivelMotor.setPower(0);
 
         armLiftMotor.setPower(0);
         armLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        armExtendMotor.setPower(0);
-
-
-        clawLift.scaleRange(CLAW_LIFT_MIN_RANGE, CLAW_LIFT_MAX_RANGE);
         clawGrab.scaleRange(CLAW_GRAB_MIN_RANGE, CLAW_GRAB_MAX_RANGE);
 
         // this base configuration sets the drive motors to run without encoders and the arm motor
@@ -180,15 +154,5 @@ public class HuskyBot {
         frontRightDrive.setPositionPIDFCoefficients(5.0);
         rearRightDrive.setVelocityPIDFCoefficients(1.27, 0.127, 0, 12.7);
         rearRightDrive.setPositionPIDFCoefficients(5.0);
-    }
-
-    public void servoMove(Servo servo, double targetPosition) {
-        double currentPosition = servo.getPosition();
-        if (targetPosition > 0) {
-            servo.setPosition(currentPosition + CLAW_MOVE_INCREMENT);
-        }
-        else if (targetPosition < 0) {
-            servo.setPosition(currentPosition - CLAW_MOVE_INCREMENT);
-        }
     }
 }

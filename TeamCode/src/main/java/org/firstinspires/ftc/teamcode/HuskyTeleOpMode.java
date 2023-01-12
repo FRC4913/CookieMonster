@@ -67,10 +67,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-
-        huskyBot.clawLift.setPosition(CLAW_LIFT_START_POSITION);
         huskyBot.clawGrab.setPosition(CLAW_GRAB_CLOSE_POSITION);
-   
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -84,19 +81,9 @@ public class HuskyTeleOpMode extends LinearOpMode {
                 finalRumbled = true;
             }
 
-            // ALL OTHER MECHANISMS REMOVED FOR ARM LIFT TESTING
-
             // Arm Lift Controls
 
-            if(gamepad2.left_stick_y < 0)
-            {   // on the way up
-                armLiftPowerDivider = 3.5 - (huskyBot.armLiftMotor.getCurrentPosition()/ARM_LIFT_MAX_POSITION);
-            }
-            else { // on the way down
-                armLiftPowerDivider = 5.5;
-            }
-
-            armLiftPower = -gamepad2.left_stick_y/armLiftPowerDivider;
+            armLiftPower = -gamepad2.left_stick_y;
             armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
 
             if (armLiftPower == 0) {
@@ -107,27 +94,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
             }
 
             huskyBot.armLiftMotor.setPower(armLiftPower);
-
-            //Arm Lift Motor
-//            if(huskyBot.armLiftMotor.getCurrentPosition() < ARM_LIFT_MAX_POSITION)
-//            {
-//                if (armLiftPower == 0) {
-//                    huskyBot.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
-//                } else {
-//                    huskyBot.armLiftMotor.setPower(armLiftPower);
-//                }
-//            }
-
-            // todo: check if this mechanism works/can replace our current arm lift controls
-            // Alternative Arm Lift Control: run to position
-            // adjusts arm lift angle based on motor position, instead of power.
-//            huskyBot.armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            armLiftPosChange = 20 * gamepad2.left_stick_y;
-//            if(huskyBot.armLiftMotor.getCurrentPosition() > ARM_LIFT_MAX_POSITION) {
-//                armLiftPosChange = (armLiftPosChange > 0) ? 0 : armLiftPosChange;
-//            }
-//            huskyBot.armLiftMotor.setTargetPosition( (int)armLiftPosChange + huskyBot.armLiftMotor.getCurrentPosition());
-
 
             telemetry.addData("Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)",
                     gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
