@@ -114,23 +114,31 @@ public class HuskyTeleOpMode extends LinearOpMode {
             // TODO: test arm lift velocity implementation.
             // Alternative Arm Lift Control: set velocity
             armLiftVel = -gamepad2.left_stick_y * VELOCITY_CONSTANT/3;
+            if(armLiftVel < 0) {
+                armLiftVel /= 8;
+            }
             if(huskyBot.armLiftMotor.getCurrentPosition() > ARM_LIFT_MAX_POSITION) {
                 armLiftVel = (armLiftVel > 0) ? 0 : armLiftVel;
             }
 
             // give power to hold arm steady if its target velocity is close to 0.
-            // otherwise, use built-in PID.
-            if (Math.abs(armLiftVel) < VELOCITY_CONSTANT/15) {
-                huskyBot.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
+            // otherwise, use built-in velocity PID.
+            if ( Math.abs(armLiftVel) < VELOCITY_CONSTANT/55 ) { // target velocity low?
+                if (Math.abs(huskyBot.armLiftMotor.getVelocity()) < 200) { // actual velocity low?
+                    huskyBot.armLiftMotor.setPower(0.05);
+                } else {
+                    huskyBot.armLiftMotor.setPower(0);
+                }
             } else {
                 huskyBot.armLiftMotor.setVelocity(armLiftVel);
             }
 
 
+
             telemetry.addData("Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)",
                     gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
             telemetry.addData("Arm Lift Target Vel", armLiftVel);
-            telemetry.addData("Arm Lift Current Vel", huskyBot.armLiftMotor.getCurrentPosition());
+            telemetry.addData("Arm Lift Current Vel", huskyBot.armLiftMotor.getVelocity());
             telemetry.update();
         }
     }
