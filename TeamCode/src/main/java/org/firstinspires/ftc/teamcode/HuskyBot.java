@@ -30,6 +30,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
+import com.acmerobotics.roadrunner.profile.MotionState;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -62,7 +66,15 @@ public class HuskyBot {
     public DcMotorEx armLiftMotor = null;
     public DcMotorEx armExtendMotor = null;
 
-    // Claw (on the Arm) Servo Init.
+    // Arm Lift PID Controller Init.
+    public static final double up_Kp = 0.0055, up_Ki = 0, up_Kd = 0.00025;
+    public static final double down_Kp = 0.00038, down_Ki = 0, down_Kd = 0.00001;
+    public static PIDController armUpPID = new PIDController(up_Kp, up_Ki, up_Kd);
+    public static PIDController armDownPID = new PIDController(down_Kp, down_Ki, down_Kd);
+    public static final double f = 0.045, l = 0;
+    public static final double ARM_LIFT_TICKS_PER_DEGREE = 28.0 * 5.23 * 5.23 * 3.61 / 360;
+
+    // Claw Servo Init.
     public Servo clawLift = null;
     public Servo clawGrab = null;
 
@@ -91,8 +103,9 @@ public class HuskyBot {
     public static final int ARM_SWIVEL_LEFT_LIMIT = 160;
 
     public static final int ARM_LIFT_MAX_POSITION = 910;
+    public static final int ARM_LIFT_MIN_POSITION = 20;
 
-    public static final double CLAW_MOVE_INCREMENT = 0.05;
+    public static final double CLAW_MOVE_INCREMENT = 0.025;
     public static final double CLAW_LIFT_MIN_RANGE = 0.0;
     public static final double CLAW_LIFT_MAX_RANGE = 1.0;
     public static final double CLAW_LIFT_START_POSITION = 0.6;   // scaled, see MIN and MAX_RANGE
@@ -158,7 +171,7 @@ public class HuskyBot {
 
         // Set Drive Motor PIDF Coefficients
         // https://docs.google.com/document/u/1/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/mobilebasic
-        // todo these still need to be tuned
+        // to do these still need to be tuned
 //        frontLeftDrive.setVelocityPIDFCoefficients(1.82, 0.182, 0, 18.2);
 //        frontLeftDrive.setPositionPIDFCoefficients(5.0);
 //        rearLeftDrive.setVelocityPIDFCoefficients(1.18, 0.118, 0, 11.8);
