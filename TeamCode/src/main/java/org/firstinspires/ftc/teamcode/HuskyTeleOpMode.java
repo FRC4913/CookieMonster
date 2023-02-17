@@ -41,9 +41,43 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import android.os.Environment;
+import org.json.JSONArray;
+import org.json.JSONException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+
 @Config
 @TeleOp(name = "Husky TeleOpMode", group = "TeleOp")
 public class HuskyTeleOpMode extends LinearOpMode {
+
+    // region SIM
+    public class RobotData{
+        public double x;
+        public double z;
+        public double heading;
+        public double timestamp;
+
+        public RobotData(double x, double z, double heading, double timestamp){
+            this.x = x;
+            this.z = z;
+            this.heading = heading;
+            this.timestamp = timestamp;
+        }
+
+        public String toString()
+        {
+            return "X: " + x;
+        }
+    }
+
+    ArrayList<RobotData> data = new ArrayList<RobotData>();
+
+    // endregion
 
     // region DEFINE VARIABLES
     HuskyBot huskyBot = new HuskyBot();
@@ -138,6 +172,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
                     -gamepad1.left_stick_y,
                     -gamepad1.left_stick_x
                     ).rotated(-poseEstimate.getHeading());
+
             // uses the left trigger to dynamically shift between different drive speeds.
             // when the trigger is fully released, driveVelocity = 1.
             // when the trigger is fully pressed, driveVelocity = 0.2.
@@ -398,8 +433,11 @@ public class HuskyTeleOpMode extends LinearOpMode {
             }
         // endregion
 
+            RobotData newData = new RobotData(poseEstimate.getX(), poseEstimate.getY(), poseEstimate.getHeading(), System.currentTimeMillis());
+            data.add(newData);
 
         // region TELEMETRY
+            telemetry.addData("AA", "AA:");
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
             // Drive Mechanism Telemetry
@@ -420,11 +458,25 @@ public class HuskyTeleOpMode extends LinearOpMode {
             telemetry.addData("follow point ", follow_point);
             telemetry.addData("vel ", huskyBot.armLiftMotor.getVelocity());
 
+
+
+            telemetry.addData("datatest", newData + " / " + poseEstimate.getX());
             telemetry.update();
         // endregion
 
         }
         // endregion
+
+        try {
+            JSONArray jarray = new JSONArray(data.toArray());
+            String directoryPath = Environment.getExternalStorageDirectory().getPath()+"/FIRST/";
+
+            FileWriter writer = new FileWriter(new File(directoryPath + "example.json"));
+            writer.write(jarray.toString());
+            writer.close();
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }
