@@ -69,9 +69,20 @@ public class HuskyTeleOpMode extends LinearOpMode {
             this.timestamp = timestamp;
         }
 
-        public String toString()
-        {
-            return "X: " + x;
+        public double getX() {
+            return x;
+        }
+
+        public double getZ() {
+            return z;
+        }
+
+        public double getHeading() {
+            return heading;
+        }
+
+        public double getTimestamp() {
+            return timestamp;
         }
     }
 
