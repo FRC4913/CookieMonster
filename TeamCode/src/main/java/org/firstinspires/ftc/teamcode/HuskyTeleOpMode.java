@@ -45,6 +45,8 @@ import com.qualcomm.robotcore.util.Range;
 import android.os.Environment;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -56,13 +58,13 @@ import java.util.ArrayList;
 public class HuskyTeleOpMode extends LinearOpMode {
 
     // region SIM
-    public class RobotData{
+    public static class RobotData{
         public double x;
         public double z;
         public double heading;
-        public double timestamp;
+        public long timestamp;
 
-        public RobotData(double x, double z, double heading, double timestamp){
+        public RobotData(double x, double z, double heading, long timestamp){
             this.x = x;
             this.z = z;
             this.heading = heading;
@@ -81,7 +83,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
             return heading;
         }
 
-        public double getTimestamp() {
+        public long getTimestamp() {
             return timestamp;
         }
     }
@@ -212,6 +214,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
                     armLiftTargetPos = ARM_LIFT_MIN_POSITION;
                 }
                 armLiftRunToPos(armLiftTargetPos);
+
 
 
                 // Increases/Decreases Arm Length
@@ -448,7 +451,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
             data.add(newData);
 
         // region TELEMETRY
-            telemetry.addData("AA", "AA:");
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
             // Drive Mechanism Telemetry
@@ -472,6 +474,7 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
 
             telemetry.addData("datatest", newData + " / " + poseEstimate.getX());
+            telemetry.addData("dataSize", newData + " / " + data.size());
             telemetry.update();
         // endregion
 
@@ -479,7 +482,15 @@ public class HuskyTeleOpMode extends LinearOpMode {
         // endregion
 
         try {
-            JSONArray jarray = new JSONArray(data.toArray());
+            JSONArray jarray = new JSONArray();
+            for (RobotData rd : data) {
+                JSONObject obj = new JSONObject();
+                obj.put("x", rd.getX());
+                obj.put("z", rd.getZ());
+                obj.put("heading", rd.getHeading());
+                obj.put("timestamp", rd.getTimestamp());
+                jarray.put(obj);
+            }
             String directoryPath = Environment.getExternalStorageDirectory().getPath()+"/FIRST/";
 
             FileWriter writer = new FileWriter(new File(directoryPath + "example.json"));
