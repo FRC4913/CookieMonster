@@ -29,12 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_LIFT_MAX_POSITION;
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_LIFT_MAX_POWER;
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_LIFT_MIN_POWER;
-import static org.firstinspires.ftc.teamcode.HuskyBot.ARM_LIFT_POWER_AT_REST;
-import static org.firstinspires.ftc.teamcode.HuskyBot.CLAW_GRAB_CLOSE_POSITION;
-import static org.firstinspires.ftc.teamcode.HuskyBot.CLAW_LIFT_START_POSITION;
+import static org.firstinspires.ftc.teamcode.Arm.ARM_LIFT_MAX_POSITION;
+import static org.firstinspires.ftc.teamcode.Arm.ARM_LIFT_MAX_POWER;
+import static org.firstinspires.ftc.teamcode.Arm.ARM_LIFT_MIN_POWER;
+import static org.firstinspires.ftc.teamcode.Arm.ARM_LIFT_POWER_AT_REST;
+import static org.firstinspires.ftc.teamcode.Arm.CLAW_GRAB_CLOSE_POSITION;
+import static org.firstinspires.ftc.teamcode.Arm.CLAW_LIFT_START_POSITION;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -43,7 +43,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @Disabled
-@TeleOp(name = "Arm Only", group = "TeleOp")
+@TeleOp(name = "org.firstinspires.ftc.teamcode.Arm Only", group = "TeleOp")
 public class ArmOnly extends LinearOpMode {
 
     final double END_GAME_TIME = 80.0;  // last 40 seconds
@@ -72,8 +72,8 @@ public class ArmOnly extends LinearOpMode {
         runtime.reset();
 
 
-        huskyBot.clawLift.setPosition(CLAW_LIFT_START_POSITION);
-        huskyBot.clawGrab.setPosition(CLAW_GRAB_CLOSE_POSITION);
+        huskyBot.arm.clawLift.setPosition(CLAW_LIFT_START_POSITION);
+        huskyBot.arm.clawGrab.setPosition(CLAW_GRAB_CLOSE_POSITION);
    
 
         // run until the end of the match (driver presses STOP)
@@ -90,28 +90,28 @@ public class ArmOnly extends LinearOpMode {
 
             // ALL OTHER MECHANISMS REMOVED FOR ARM LIFT TESTING
 
-            // Arm Lift Controls
+            // org.firstinspires.ftc.teamcode.Arm Lift Controls
             if(gamepad2.left_stick_y > 0){
                 armLiftPowerDivider = 5.8;
             } else{
-                armLiftPowerDivider = 4 - (huskyBot.armLiftMotor.getCurrentPosition()/900);
+                armLiftPowerDivider = 4 - (huskyBot.arm.armLiftMotor.getCurrentPosition()/900.0);
             }
 
             armLiftPower = -gamepad2.left_stick_y/armLiftPowerDivider;
             armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
 
-            // Arm Lift Motor
-            if(huskyBot.armLiftMotor.getCurrentPosition() < ARM_LIFT_MAX_POSITION)
+            // org.firstinspires.ftc.teamcode.Arm Lift Motor
+            if(huskyBot.arm.armLiftMotor.getCurrentPosition() < ARM_LIFT_MAX_POSITION)
             {
                 if (armLiftPower == 0) {
-                    huskyBot.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
+                    huskyBot.arm.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
                 } else {
-                    huskyBot.armLiftMotor.setPower(armLiftPower + ARM_LIFT_POWER_AT_REST);
+                    huskyBot.arm.armLiftMotor.setPower(armLiftPower + ARM_LIFT_POWER_AT_REST);
                 }
             }
 
             // todo: check if this mechanism works/can replace our current arm lift controls
-            // Alternative Arm Lift Control: run to position
+            // Alternative org.firstinspires.ftc.teamcode.Arm Lift Control: run to position
             // adjusts arm lift angle based on motor position, instead of power.
 //            huskyBot.armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            armLiftPosChange = 20 * gamepad2.left_stick_y;
@@ -121,9 +121,9 @@ public class ArmOnly extends LinearOpMode {
 //            huskyBot.armLiftMotor.setTargetPosition( (int)armLiftPosChange + huskyBot.armLiftMotor.getCurrentPosition());
 
 
-            telemetry.addData("Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)",
-                    gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
-            telemetry.addData("Arm Lift Power Divider", armLiftPowerDivider);
+            telemetry.addData("org.firstinspires.ftc.teamcode.Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)",
+                    gamepad2.left_stick_y, huskyBot.arm.armLiftMotor.getPower(), huskyBot.arm.armLiftMotor.getCurrentPosition());
+            telemetry.addData("org.firstinspires.ftc.teamcode.Arm Lift Power Divider", armLiftPowerDivider);
             telemetry.update();
         }
     }

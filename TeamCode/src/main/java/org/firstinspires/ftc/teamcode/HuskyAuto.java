@@ -29,8 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.HuskyBot.CLAW_LIFT_START_POSITION;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -46,7 +44,7 @@ public class HuskyAuto extends HuskyAutoBase {
         waitForStart();
         runtime.reset();
 
-        huskyBot.clawLift.setPosition(1.0);
+        huskyBot.arm.clawLift.setPosition(1.0);
 
         this.parkLocation = getParkLocation();
 
@@ -82,6 +80,21 @@ public class HuskyAuto extends HuskyAutoBase {
                 .build();
 
 
+        // Start a separate thread to control the arm
+        Thread armThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (opModeIsActive()) {
+                    huskyBot.arm.run();
+                    // add a small delay to give the arm time to move
+                    sleep(10);
+                }
+            }
+        });
+        armThread.start();
+
+
+
 
         // Backup plan for apriltag detection (move the robot little bit right and try to detect again
         if(this.parkLocation == Location.LOCATION_0){
@@ -96,8 +109,10 @@ public class HuskyAuto extends HuskyAutoBase {
             this.parkLocation = Location.LOCATION_2;
         }
 
+        huskyBot.arm.setPositionToHighJunction();
         switch (this.parkLocation){
             case LOCATION_1:
+
                 drive.followTrajectory(location1TrajA);
                 drive.followTrajectory(location1TrajB);
                 break;
@@ -109,6 +124,7 @@ public class HuskyAuto extends HuskyAutoBase {
                 drive.followTrajectory(location3TrajB);
                 break;
         }
+//        huskyBot.arm.setPositionToGroundJunctiondJunction();
 
         telemetry.update();
     }
