@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class Arm {
     // org.firstinspires.ftc.teamcode.Arm Control Motor Init.
@@ -153,118 +154,124 @@ public class Arm {
     }
     // endregion
 
-    public void run(){
-        switch (armState){
-            case ARM_WAIT:
-                finiteTimer.reset();
-                shouldChangeTheClawLift = false;
-                break;
-            case STEP_1:
-                // Step 1: Reset the arm extender (close)
-
-                armExtendMotor.setTargetPosition(-10);
-                armExtendMotor.setPower(1.0);
-                armExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                armState = ArmState.STEP_2;
-
-                break;
-            case STEP_2:
-                // Step 2:
-                // Wait until the step 1 is completed
-                // Then change the arm lift's position (up or down based on the target position)
-                armLiftRunToPos(armLiftMotor.getCurrentPosition());
-
-                if(armExtendMotor.isBusy()){
-                    if(finiteTimer.seconds() > 7){
-                        armExtendMotor.setPower(0);
-                        armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-                        armLiftTargetPos = armLiftMotor.getCurrentPosition();
-
-                        armState = ArmState.ARM_WAIT;
+    public void run(LinearOpMode opMode){
+        new Thread(() -> {
+            while (!opMode.isStopRequested() && opMode.opModeIsActive()) {
+                switch (armState){
+                    case ARM_WAIT:
+                        finiteTimer.reset();
+                        shouldChangeTheClawLift = false;
                         break;
-                    }
-                } else {
-                    armExtendMotor.setPower(0);
-                    armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    case STEP_1:
+                        // Step 1: Reset the arm extender (close)
 
-                    follow_point = armLiftMotor.getCurrentPosition();
+                        armExtendMotor.setTargetPosition(-10);
+                        armExtendMotor.setPower(1.0);
+                        armExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                    armState = ArmState.STEP_3;
-                }
+                        armState = ArmState.STEP_2;
 
-                break;
-            case STEP_3:
-                // Step 3:
-                // Wait until the step 2 is completed
-                // Then change the arm extender's position (in or out based on the target position)
-
-                // Gradually increment follow_point until it reaches the target position.
-                int error = follow_point - armLiftTargetPos;
-                if (error > 50) {
-                    follow_point -= 50;
-                } else if (error < 50) {
-                    follow_point += 50;
-                } else {
-                    follow_point = armLiftTargetPos;
-                }
-                armLiftRunToPos(follow_point);
-
-                if (Math.abs(armLiftMotor.getCurrentPosition() - armLiftTargetPos) > 100) {
-                    if(finiteTimer.seconds() > 7){
-                        armLiftTargetPos = armLiftMotor.getCurrentPosition();
-
-                        armState = ArmState.ARM_WAIT;
                         break;
-                    }
 
-                } else {
-                    armExtendMotor.setTargetPosition(armExtendTargetPos);
-                    armExtendMotor.setPower(1.0);
-                    armExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    case STEP_2:
+                        // Step 2:
+                        // Wait until the step 1 is completed
+                        // Then change the arm lift's position (up or down based on the target position)
+                        armLiftRunToPos(armLiftMotor.getCurrentPosition());
 
-                    armState = ArmState.STEP_4;
-                }
+                        if(armExtendMotor.isBusy()){
+                            if(finiteTimer.seconds() > 7){
+                                armExtendMotor.setPower(0);
+                                armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+                                armLiftTargetPos = armLiftMotor.getCurrentPosition();
 
-                break;
-            case STEP_4:
-                // Step 4:
-                // Wait until the step 3 is completed
-                // Then change armState to wait (default)
-                armLiftRunToPos(armLiftTargetPos);
+                                armState = ArmState.ARM_WAIT;
+                                break;
+                            }
+                        } else {
+                            armExtendMotor.setPower(0);
+                            armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-                if (armExtendMotor.isBusy()) {
-                    if(finiteTimer.seconds() > 7){
-                        armExtendMotor.setPower(0);
-                        armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                            follow_point = armLiftMotor.getCurrentPosition();
 
-                        armLiftTargetPos = armLiftMotor.getCurrentPosition();
-
-                        armState = ArmState.ARM_WAIT;
-                        break;
-                    }
-                } else {
-                    armExtendMotor.setPower(0);
-                    armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-                    if(shouldChangeTheClawLift){
-                        if(finiteTimer.seconds() > 7){
-                            armState = ArmState.ARM_WAIT;
-                            break;
+                            armState = ArmState.STEP_3;
                         }
 
-                        clawLift.setPosition(clawLiftTargetPos);
-                    }
+                        break;
+                    case STEP_3:
+                        // Step 3:
+                        // Wait until the step 2 is completed
+                        // Then change the arm extender's position (in or out based on the target position)
 
-                    armState = ArmState.ARM_WAIT;
+                        // Gradually increment follow_point until it reaches the target position.
+                        int error = follow_point - armLiftTargetPos;
+                        if (error > 50) {
+                            follow_point -= 50;
+                        } else if (error < 50) {
+                            follow_point += 50;
+                        } else {
+                            follow_point = armLiftTargetPos;
+                        }
+                        armLiftRunToPos(follow_point);
+
+                        if (Math.abs(armLiftMotor.getCurrentPosition() - armLiftTargetPos) > 50) {
+                            if(finiteTimer.seconds() > 7){
+                                armLiftTargetPos = armLiftMotor.getCurrentPosition();
+
+                                armState = ArmState.ARM_WAIT;
+                                break;
+                            }
+
+                        } else {
+                            armExtendMotor.setTargetPosition(armExtendTargetPos);
+                            armExtendMotor.setPower(1.0);
+                            armExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                            armState = ArmState.STEP_4;
+                        }
+
+
+                        break;
+                    case STEP_4:
+                        // Step 4:
+                        // Wait until the step 3 is completed
+                        // Then change armState to wait (default)
+                        armLiftRunToPos(armLiftTargetPos);
+
+                        if (armExtendMotor.isBusy()) {
+                            if(finiteTimer.seconds() > 7){
+                                armExtendMotor.setPower(0);
+                                armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+                                armLiftTargetPos = armLiftMotor.getCurrentPosition();
+
+                                armState = ArmState.ARM_WAIT;
+                                break;
+                            }
+                        } else {
+                            armExtendMotor.setPower(0);
+                            armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+                            if(shouldChangeTheClawLift){
+                                if(finiteTimer.seconds() > 7){
+                                    armState = ArmState.ARM_WAIT;
+                                    break;
+                                }
+
+                                clawLift.setPosition(clawLiftTargetPos);
+                            }
+
+                            armState = ArmState.ARM_WAIT;
+                        }
+
+                        break;
+
+                    default:
                 }
+            }
+        }).start();
 
-                break;
-
-            default:
-        }
     }
 
     public void setPositionToGroundJunction(){

@@ -76,8 +76,10 @@ public class HuskyTeleOpMode extends LinearOpMode {
 
         huskyBot.arm.clawLift.setPosition(CLAW_LIFT_START_POSITION);
         huskyBot.arm.clawGrab.setPosition(CLAW_GRAB_CLOSE_POSITION);
-        // endregion
 
+        // Start a separate thread to control the arm
+        huskyBot.arm.run(this);
+        // endregion
 
         // region TELE-OP LOOP
         while (opModeIsActive()) {
@@ -209,8 +211,6 @@ public class HuskyTeleOpMode extends LinearOpMode {
                 // Button Y: High junction position
                 huskyBot.arm.setPositionToHighJunction();
             }
-
-            huskyBot.arm.run();
 
         // endregion
 

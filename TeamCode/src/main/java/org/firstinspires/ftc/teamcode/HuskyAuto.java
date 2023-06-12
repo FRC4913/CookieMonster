@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -41,90 +42,48 @@ public class HuskyAuto extends HuskyAutoBase {
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
 
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        final double FORWARD_DISTANCE = 24;
+        final double STRAFE_DISTANCE = 24;
+
+        Trajectory traj1 = drive.trajectoryBuilder(new Pose2d())
+                .forward(66)
+                .build();
+
+        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
+                .back(40)
+                .build();
+
+        // Start a separate thread to control the arm
+        huskyBot.arm.run(this);
+
         waitForStart();
         runtime.reset();
 
         huskyBot.arm.clawLift.setPosition(1.0);
 
-        this.parkLocation = getParkLocation();
+        huskyBot.arm.setPositionToGroundJunction();
+        drive.followTrajectory(traj1);
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        sleep(500);
 
-        // Backup Plan Trajectory
-        Trajectory backupPlanTrajA = drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(8)
-                .build();
-        Trajectory backupPlanTrajB = drive.trajectoryBuilder(backupPlanTrajA.end())
-                .strafeLeft(8)
-                .build();
+        huskyBot.arm.clawGrab.setPosition(Arm.CLAW_GRAB_CLOSE_POSITION);
 
-        // Location 1 Trajectory
-        Trajectory location1TrajA = drive.trajectoryBuilder(new Pose2d())
-                .forward(26)
-                .build();
-        Trajectory location1TrajB = drive.trajectoryBuilder(location1TrajA.end())
-                .strafeLeft(24)
-                .build();
+        sleep(500);
 
-        // Location 2 Trajectory
-        Trajectory location2TrajA = drive.trajectoryBuilder(new Pose2d())
-                .forward(26)
-                .build();
+        huskyBot.arm.setPositionToMediumJunction();
+        drive.followTrajectory(traj2);
 
-        // Location 3 Trajectory
-        Trajectory location3TrajA = drive.trajectoryBuilder(new Pose2d())
-                .forward(26)
-                .build();
-        Trajectory location3TrajB = drive.trajectoryBuilder(location3TrajA.end())
-                .strafeRight(24)
-                .build();
+        sleep(500);
 
+        drive.turn(Math.toRadians(45));
+        sleep(500);
+        huskyBot.arm.clawGrab.setPosition(Arm.CLAW_GRAB_OPEN_POSITION);
+        sleep(500);
+        huskyBot.arm.setPositionToGroundJunction();
+        sleep(1000);
 
-        // Start a separate thread to control the arm
-        Thread armThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (opModeIsActive()) {
-                    huskyBot.arm.run();
-                    // add a small delay to give the arm time to move
-                    sleep(10);
-                }
-            }
-        });
-        armThread.start();
-
-
-
-
-        // Backup plan for apriltag detection (move the robot little bit right and try to detect again
-        if(this.parkLocation == Location.LOCATION_0){
-            drive.followTrajectory(backupPlanTrajA);
-            this.parkLocation = getParkLocation();
-            drive.followTrajectory(backupPlanTrajB);
-        }
-
-        // Set the park location to 2 if it couldn't detect the apriltag even after the backup plan
-        if(this.parkLocation == Location.LOCATION_0){
-            telemetry.addLine("No detection!");
-            this.parkLocation = Location.LOCATION_2;
-        }
-
-        huskyBot.arm.setPositionToHighJunction();
-        switch (this.parkLocation){
-            case LOCATION_1:
-
-                drive.followTrajectory(location1TrajA);
-                drive.followTrajectory(location1TrajB);
-                break;
-            case LOCATION_2:
-                drive.followTrajectory(location2TrajA);
-                break;
-            case LOCATION_3:
-                drive.followTrajectory(location3TrajA);
-                drive.followTrajectory(location3TrajB);
-                break;
-        }
-//        huskyBot.arm.setPositionToGroundJunctiondJunction();
 
         telemetry.update();
     }
