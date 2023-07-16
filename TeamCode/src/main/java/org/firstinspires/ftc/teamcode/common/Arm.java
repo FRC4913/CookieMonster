@@ -38,10 +38,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @Disabled
-@TeleOp(name = "Arm Only", group = "TeleOp")
+@TeleOp(name = "Arm", group = "TeleOp")
 public class Arm extends LinearOpMode {
-    final double END_GAME_TIME = 80.0;  // last 40 seconds
-    final double FINAL_TIME = 110.0;    // last 10 seconds
     boolean endGameRumbled = false;
     boolean finalRumbled = false;
     double armLiftPower = 0.0;
@@ -76,26 +74,23 @@ public class Arm extends LinearOpMode {
             }
 
             // Arm Lift Controls
-            if(gamepad2.left_stick_y > 0)
-                armLiftPowerDivider = 5.8;
-            else
-                armLiftPowerDivider = 4 - (huskyBot.armLiftMotor.getCurrentPosition()/900);
-
-
-            armLiftPower = -gamepad2.left_stick_y/armLiftPowerDivider;
-            armLiftPower = Range.clip(armLiftPower, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
+            armLiftPower = Range.clip(-gamepad2.left_stick_y, -ARM_LIFT_MIN_POWER, ARM_LIFT_MAX_POWER);
 
             // Arm Lift Motor
             if(huskyBot.armLiftMotor.getCurrentPosition() < ARM_LIFT_MAX_POSITION) {
-                if (armLiftPower == 0)
-                    huskyBot.armLiftMotor.setPower(ARM_LIFT_POWER_AT_REST);
-                else
-                    huskyBot.armLiftMotor.setPower(armLiftPower + ARM_LIFT_POWER_AT_REST);
+                huskyBot.armLiftMotor.setPower(armLiftPower == 0 ? ARM_LIFT_POWER_AT_REST : (armLiftPower + ARM_LIFT_POWER_AT_REST));
             }
 
-            telemetry.addData("Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)",
-                    gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
-            telemetry.addData("Arm Lift Power Divider", armLiftPowerDivider);
+            telemetry.addLine("ARM");
+
+            telemetry.addData("Lift", "Left Y: (%.2f)", gamepad2.left_stick_y);
+            telemetry.addData("Lift", "Power: (%.2f)", huskyBot.armLiftMotor.getPower());
+            telemetry.addData("Lift", "Pos: (%d)", huskyBot.armLiftMotor.getCurrentPosition());
+
+            telemetry.addData("Lift Power Divider", armLiftPowerDivider);
+
+            telemetry.addLine(TELEMETRY_SEPARATOR);
+
             telemetry.update();
         }
     }

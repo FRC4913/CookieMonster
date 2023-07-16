@@ -3,6 +3,10 @@ package org.firstinspires.ftc.teamcode.common;
 import com.arcrobotics.ftclib.controller.PIDController;
 
 public class Constants {
+    // Game Constants
+    public static final double END_GAME_TIME = 80.0;  // last 40 seconds
+    public static final double FINAL_TIME = 110.0;    // last 10 seconds
+
     // Arm Lift PID Controller Init.
     public static final double up_Kp = 0.0055, up_Ki = 0, up_Kd = 0.00025;
     public static final double down_Kp = 0.00038, down_Ki = 0, down_Kd = 0.00001;
@@ -46,4 +50,7 @@ public class Constants {
     public static final int ARM_LIFT_LOW_POSITION = 360, ARM_EXTEND_LOW_POSITION = -10; public static final double CLAW_LIFT_LOW_POSITION = 0.55;
     public static final int ARM_LIFT_MED_POSITION = 660, ARM_EXTEND_MED_POSITION = -10; public static final double CLAW_LIFT_MED_POSITION = 0.50;
     public static final int ARM_LIFT_HIGH_POSITION = 880, ARM_EXTEND_HIGH_POSITION = -3215; public static final double CLAW_LIFT_HIGH_POSITION = 0.35;
+
+    // Telemetry
+    public static final String TELEMETRY_SEPARATOR = "--------------------";
 }
