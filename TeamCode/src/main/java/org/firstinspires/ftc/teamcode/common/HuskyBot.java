@@ -92,39 +92,17 @@ public class HuskyBot {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and Initialize Arm Motors and Servos
-        armSwivelMotor = hwMap.get(DcMotorEx.class, "arm_swivel");
         armLiftMotor = hwMap.get(DcMotorEx.class, "arm_lift");
-        armExtendMotor = hwMap.get(DcMotorEx.class, "arm_extend");
 
-        clawLift = hwMap.get(Servo.class, "claw_lift");
-        clawGrab = hwMap.get(Servo.class, "claw_grab");
-        clawLift.scaleRange(CLAW_LIFT_MIN_RANGE, CLAW_LIFT_MAX_RANGE);
-        clawGrab.scaleRange(CLAW_GRAB_MIN_RANGE, CLAW_GRAB_MAX_RANGE);
-
-        // Define and Init. Magnetic Limit Switches
-        armExtendMax = hwMap.get(TouchSensor.class, "arm_extend_max");
-        armExtendMin = hwMap.get(TouchSensor.class, "arm_extend_min");
-
-        // Set Arm Motors to Zero Power
-        armSwivelMotor.setPower(0);
         armLiftMotor.setPower(0);
-        armExtendMotor.setPower(0);
 
-        // Reset Arm Motor Encoders
-        armSwivelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armExtendMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        // Set Arm Motor Behaviors
-        armSwivelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armExtendMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         armLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        armSwivelMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
