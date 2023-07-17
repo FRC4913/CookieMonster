@@ -29,14 +29,12 @@
 
 package org.firstinspires.ftc.teamcode.common;
 
-import static org.firstinspires.ftc.teamcode.common.Constants.*;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvWebcam;
@@ -52,17 +50,9 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class HuskyBot {
     /* Public OpMode members. */
     public SampleMecanumDrive drive = null;
+    HardwareMap hwMap = null;
 
-    public DcMotorEx frontLeftDrive = null;
-    public DcMotorEx frontRightDrive = null;
-    public DcMotorEx rearLeftDrive = null;
-    public DcMotorEx rearRightDrive = null;
-
-    // Arm Control Motor Init.
-    public DcMotorEx armSwivelMotor = null;
     public DcMotorEx armLiftMotor = null;
-    public DcMotorEx armExtendMotor = null;
-
 
     // Claw Servo Init.
     public Servo clawLift = null;
@@ -70,13 +60,6 @@ public class HuskyBot {
 
     // Webcam
     public OpenCvWebcam webcam;
-
-    // Magnetic Limit Switches
-    public TouchSensor armExtendMax = null;
-    public TouchSensor armExtendMin = null;
-
-    /* local OpMode members. */
-    HardwareMap hwMap = null;
 
     public HuskyBot() {
 
@@ -104,15 +87,5 @@ public class HuskyBot {
 
         armLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-    }
-
-    public void servoMove(Servo servo, double targetPosition) {
-        double currentPosition = servo.getPosition();
-        if (targetPosition > 0) {
-            servo.setPosition(currentPosition + CLAW_MOVE_INCREMENT);
-        }
-        else if (targetPosition < 0) {
-            servo.setPosition(currentPosition - CLAW_MOVE_INCREMENT);
-        }
     }
 }
