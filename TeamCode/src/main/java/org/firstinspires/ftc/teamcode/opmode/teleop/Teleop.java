@@ -106,7 +106,7 @@ public class Teleop extends LinearOpMode {
             // endregion
 
             // region TELEMETRY
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Status", "Run Time: " + runtime);
 
             // Drive Mechanism Telemetry
             telemetry.addData("Stick", "y (%.2f), x (%.2f), rx (%.2f)", gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
