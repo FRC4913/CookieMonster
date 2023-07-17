@@ -34,8 +34,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvWebcam;
 
@@ -53,10 +51,6 @@ public class HuskyBot {
     HardwareMap hwMap = null;
 
     public DcMotorEx armLiftMotor = null;
-
-    // Claw Servo Init.
-    public Servo clawLift = null;
-    public Servo clawGrab = null;
 
     // Webcam
     public OpenCvWebcam webcam;

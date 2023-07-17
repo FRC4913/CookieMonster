@@ -44,69 +44,14 @@ public class Auto extends AutoBase {
         waitForStart();
         runtime.reset();
 
-        huskyBot.clawLift.setPosition(1.0);
-
-        this.parkLocation = getParkLocation();
-
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        // Backup Plan Trajectory
-        Trajectory backupPlanTrajA = drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(8)
-                .build();
-        Trajectory backupPlanTrajB = drive.trajectoryBuilder(backupPlanTrajA.end())
-                .strafeLeft(8)
+        Trajectory testTraj = drive.trajectoryBuilder(new Pose2d())
+                .forward(10)
                 .build();
 
-        // Location 1 Trajectory
-        Trajectory location1TrajA = drive.trajectoryBuilder(new Pose2d())
-                .forward(26)
-                .build();
-        Trajectory location1TrajB = drive.trajectoryBuilder(location1TrajA.end())
-                .strafeLeft(24)
-                .build();
+        drive.followTrajectory(testTraj);
 
-        // Location 2 Trajectory
-        Trajectory location2TrajA = drive.trajectoryBuilder(new Pose2d())
-                .forward(26)
-                .build();
-
-        // Location 3 Trajectory
-        Trajectory location3TrajA = drive.trajectoryBuilder(new Pose2d())
-                .forward(26)
-                .build();
-        Trajectory location3TrajB = drive.trajectoryBuilder(location3TrajA.end())
-                .strafeRight(24)
-                .build();
-
-
-
-        // Backup plan for apriltag detection (move the robot little bit right and try to detect again
-        if(this.parkLocation == Location.LOCATION_0){
-            drive.followTrajectory(backupPlanTrajA);
-            this.parkLocation = getParkLocation();
-            drive.followTrajectory(backupPlanTrajB);
-        }
-
-        // Set the park location to 2 if it couldn't detect the apriltag even after the backup plan
-        if(this.parkLocation == Location.LOCATION_0){
-            telemetry.addLine("No detection!");
-            this.parkLocation = Location.LOCATION_2;
-        }
-
-        switch (this.parkLocation){
-            case LOCATION_1:
-                drive.followTrajectory(location1TrajA);
-                drive.followTrajectory(location1TrajB);
-                break;
-            case LOCATION_2:
-                drive.followTrajectory(location2TrajA);
-                break;
-            case LOCATION_3:
-                drive.followTrajectory(location3TrajA);
-                drive.followTrajectory(location3TrajB);
-                break;
-        }
 
         telemetry.update();
     }
