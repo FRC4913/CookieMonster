@@ -52,7 +52,6 @@ public class Auto extends AutoBase {
 
         drive.followTrajectory(testTraj);
 
-
         telemetry.update();
     }
 }

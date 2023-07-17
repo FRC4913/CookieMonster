@@ -116,10 +116,6 @@ public class Teleop extends LinearOpMode {
             // Arm Telemetry
             telemetry.addData("Arm Lift", "Left Y: (%.2f), Power: (%.2f), Pos: (%d)", gamepad2.left_stick_y, huskyBot.armLiftMotor.getPower(), huskyBot.armLiftMotor.getCurrentPosition());
 
-            // Claw Telemetry
-            telemetry.addData("Claw Lift", "Right Y: (%.2f), Pos: (%.2f)", gamepad2.right_stick_y, huskyBot.clawLift.getPosition());
-            telemetry.addData("Claw Grab", "Pos: (%.2f)", huskyBot.clawGrab.getPosition());
-
             telemetry.addData("Current pos", huskyBot.armLiftMotor.getCurrentPosition());
             telemetry.addData("Vel", huskyBot.armLiftMotor.getVelocity());
 
