@@ -119,8 +119,8 @@ public class Teleop extends LinearOpMode {
             telemetry.addData("Claw Lift", "Right Y: (%.2f), Pos: (%.2f)", gamepad2.right_stick_y, huskyBot.clawLift.getPosition());
             telemetry.addData("Claw Grab", "Pos: (%.2f)", huskyBot.clawGrab.getPosition());
 
-            telemetry.addData("current pos ", huskyBot.armLiftMotor.getCurrentPosition());
-            telemetry.addData("vel ", huskyBot.armLiftMotor.getVelocity());
+            telemetry.addData("Current pos", huskyBot.armLiftMotor.getCurrentPosition());
+            telemetry.addData("Vel", huskyBot.armLiftMotor.getVelocity());
 
             telemetry.update();
             // endregion
@@ -128,3 +128,4 @@ public class Teleop extends LinearOpMode {
         // endregion
     }
 }
+// unnecessary
